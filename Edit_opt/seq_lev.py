@@ -21,7 +21,7 @@ def all_edit():
 
 
     repeats_out = dict()
-    new_motifs = list()
+    new_motifs = set()
     out_file = open(filename,"w+")
     
     motif_lengths = []
@@ -49,20 +49,21 @@ def all_edit():
         motif_dict['strand'] = L[3]
         repeats_out[motif] = motif_dict
         repeats_out['rep_lengths'] = [length_cutoff]
-        new_motifs.append(motif) #consists of all the motifs of specified length
+        new_motifs.add(motif) #consists of all the motifs of specified length
 
     """
     accessing the newly formed motifs 
     """
 
     #alphabet = ['A','T','G','C']
-    i=-1
+    #i=-1
 
     repeat_lengths = repeats_out['rep_lengths'] # All possible length cutoffs
     
     for record in records:
 
         input_seq = str(record.seq).upper()
+        print(input_seq)
 
         input_seq_length = len(input_seq)
         for length_cutoff in repeat_lengths:
@@ -72,17 +73,21 @@ def all_edit():
             while sub_stop <= input_seq_length:
             
                 subseq = input_seq[sub_start:sub_stop]
-        
-                for ext_rep in new_motifs:
-                    i = i+1
-                    cal_edit_dis = distance(subseq, ext_rep)
-                    if(cal_edit_dis <= edit_dis):
-                        print('{:<20s} {:<20s} {:<20s} {:<20s} {:<20s} {:<10s} {:<10s}'.format(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis)),file = out_file)
-                        #print(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis),sep='\t',file = out_file)
 
-            
-                sub_start += 1
-                sub_stop = sub_start + length_cutoff
+                if subseq not in new_motifs:
+                    
+                    for ext_rep in new_motifs:
+                        #i = i+1
+                        cal_edit_dis = distance(subseq, ext_rep)
+                        if(cal_edit_dis <= edit_dis):
+                            print('{:<20s} {:<20s} {:<20s} {:<20s} {:<20s} {:<10s} {:<10s}'.format(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis)),file = out_file)
+                            #print(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis),sep='\t',file = out_file)
+                    sub_start += 1
+                    sub_stop = sub_start + length_cutoff
+
+                else:
+                    sub_start += length_cutoff
+                    sub_stop = sub_start + length_cutoff
                 
 
 st = d.datetime.now()    
