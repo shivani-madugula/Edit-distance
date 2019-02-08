@@ -88,10 +88,14 @@ def all_edit():
                         cal_edit_dis = distance(subseq, ext_rep)
                         if(cal_edit_dis <= edit_dis):
                             if cal_edit_dis not in dict_out.keys():
-                                dict_out[cal_edit_dis] = set()
-                                dict_out[cal_edit_dis].add(repeats_out[ext_rep]['class'])
+                                dict_out[cal_edit_dis] = list()
+                                for s in range(0,2):
+                                    dict_out[cal_edit_dis].append(set())
+                                dict_out[cal_edit_dis][0].add(repeats_out[ext_rep]['class'])
+                                dict_out[cal_edit_dis][1].add(repeats_out[ext_rep]['strand'])
                             else:    
-                                dict_out[cal_edit_dis].add(repeats_out[ext_rep]['class'])
+                                dict_out[cal_edit_dis][0].add(repeats_out[ext_rep]['class'])
+                                dict_out[cal_edit_dis][1].add(repeats_out[ext_rep]['strand'])
                             #print('{:<20s} {:<20s} {:<20s} {:<20s} {:<20s} {:<10s} {:<10s}'.format(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis)),file = out_file)
                             #print(record.id,str(sub_start),str(sub_stop),subseq,ext_rep,repeats_out[ext_rep]['class'],str(cal_edit_dis),sep='\t',file = out_file)
                     
@@ -101,7 +105,8 @@ def all_edit():
                             l.append(int(m))
                         cls_out = min(l)
                     
-                        print('{:<20s} {:<20s} {:<20s} {:<20s} {:<20s} {:<10s} {:<10s}'.format(record.id,str(sub_start),str(sub_stop),subseq,str('NA'),str(cls_out),":".join(str(x) for x in dict_out[cls_out])),file = out_file)
+                        #print('{:<20s} {:<20s} {:<20s} {:<20s} {:<20s} {:<10s} {:<10s}'.format(record.id,str(sub_start),str(sub_stop),subseq,str('NA'),str(cls_out),":".join(str(x) for x in dict_out[cls_out])),file = out_file)
+                        print(record.id,sub_start,sub_stop,len(subseq),subseq,str('NA'),cls_out,":".join(str(x) for x in dict_out[cls_out][1]),":".join(str(y) for y in dict_out[cls_out][0]),sep='\t',file = out_file)
                     sub_start += 1
                     sub_stop = sub_start + length_cutoff
 
