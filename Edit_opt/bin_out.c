@@ -42,27 +42,9 @@ main()
         }
 
     }
-    }
-    //fprintf(fptr,"11011011"); 
+    } 
     free(str);
     fclose(fptr);
     
-    //FILE *fp;
-   //char c[] = "this is tutorialspoint";
-   //char buffer[8];
-
-   /* Open file for both reading and writing */
-   //fp = fopen("samp_bin.bit", "r");
-
-   /* Write data to the file */
-   //fwrite(c, strlen(c) + 1, 1, fp);
-
-   /* Seek to the beginning of the file */
-   //fseek(fp, 0, SEEK_SET);
-
-   /* Read and display data */
-   //fread(buffer, 8, 1, fp);
-   //printf("%s\n", buffer);
-   //fclose(fp);
      
 } 
